@@ -1182,10 +1182,19 @@ net.Receive( "ServerSetWaypoint", function( len, pl )
 	ent:SetNWInt("path", ent.path)
 end)
 
-hook.Add( "PlayerSay", "!start", function(player, text, team)
+hook.Add("PlayerSay", "MelonPlayerSay", function(player, text, team)
 	if (text:lower() == "/startgame") then
 		StartGame()
 	elseif (text:lower() == "/stopgame") then
 		SandboxMode()
 	end
-end )
+end)
+
+--hook.Add("PlayerSpawnProp", "MelonPlayerSpawnProp", function(player, model)
+
+--end)
+
+hook.Add("PlayerSpawnedProp", "MelonPlayerSpawnedProp", function(player, model, entity)
+	entity.melon_playerName = player:Name()
+	print(entity.melon_playerName)
+end)
