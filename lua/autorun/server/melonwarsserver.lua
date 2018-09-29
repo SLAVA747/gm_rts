@@ -1183,9 +1183,9 @@ net.Receive( "ServerSetWaypoint", function( len, pl )
 end)
 
 hook.Add("PlayerSay", "MelonPlayerSay", function(player, text, team)
-	if (text:lower() == "/startgame") then
+	if (text:lower() == "!start") then
 		StartGame()
-	elseif (text:lower() == "/stopgame") then
+	elseif (text:lower() == "!stop") then
 		SandboxMode()
 	end
 end)
