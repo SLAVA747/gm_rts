@@ -1182,21 +1182,10 @@ net.Receive( "ServerSetWaypoint", function( len, pl )
 	ent:SetNWInt("path", ent.path)
 end)
 
-function Hello()
-	print( "Hello, world!" )
-end
-
-hook.Add( "PlayerSay", "!start", function()
-	StartGame()
+hook.Add( "PlayerSay", "!start", function(player, text, team)
+	if (text:lower() == "/startgame") then
+		StartGame()
+	elseif (text:lower() == "/stopgame") then
+		SandboxMode()
+	end
 end )
-
-hook.Add( "PlayerSay", "!stop", function()
-	SandboxMode()
-end )
-
-
---[[net.Receive( "ServerSetSpawnpoint", function( len, pl )
-	local ent = net.ReadEntity()
-	ent.spawnpoint = net.ReadInt(8)
-end)]]
-
