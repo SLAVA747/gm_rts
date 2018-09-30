@@ -650,7 +650,7 @@ local function StartGame( len, pl )
 		net.Start("RestartQueue")
 		net.Send(v)
 		sound.Play( "garrysmod/content_downloaded.wav", v:GetPos()+Vector(0,0,45), 100, 40, 1)
-		surface.PlaySound( "rts_music/1.mp3" )
+		MelonPlaySound(pl, "rts_music/1.mp3")
 		v:PrintMessage( HUD_PRINTCENTER, "The MelonWars match has begun!" )
 		v:PrintMessage( HUD_PRINTTALK, "/////////////////////////////// The MelonWars match has begun!" )
 	end
@@ -1185,6 +1185,11 @@ net.Receive( "ServerSetWaypoint", function( len, pl )
 	ent:SetNWInt("path", ent.path)
 end)
 
+function MelonPlaySound(player, sound)
+	net.Start("PlaySound")
+		net.WriteString(sound)
+	net.Send(player)
+end
 
 -- Голосование за смену режима:
 hook.Add("PlayerSay", "MelonPlayerSay", function(player, text, team)
@@ -1203,9 +1208,3 @@ hook.Add("PlayerSpawnedProp", "MelonPlayerSpawnedProp", function(player, model, 
 	entity.melon_playerName = player:Name()
 	print(entity.melon_playerName)
 end)
-
-
-
-
-
-

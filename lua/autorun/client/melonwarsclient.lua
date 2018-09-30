@@ -431,6 +431,11 @@ net.Receive( "EditorSetWaypoint", function( len, pl )
 	end
 end )
 
+net.Receive("PlaySound", function(len, pl)
+	local sound = net.ReadString()
+	surface.PlaySound(sound)
+end)
+
 --[[
 hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
 	local trace = LocalPlayer():GetEyeTrace()
@@ -453,5 +458,3 @@ end)
 --]]
 
 -- Музыка на заднем фоне:
-
-
