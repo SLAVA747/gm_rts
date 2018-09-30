@@ -49,7 +49,9 @@ util.AddNetworkString( "DrawWireframeBox" )
 util.AddNetworkString( "ServerSetSpawnpoint" )]]
 
 util.AddNetworkString( "ChatTimer" )
+
 util.AddNetworkString( "PlaySound" )
+util.AddNetworkString( "SendPropName" )
 
 --CreateConVar( "mw_save_name", "default", 8192, "Set the name of the file to save with 'mw_save'" )
 --CreateConVar( "mw_save_name_custom", "default", 8192, "Set the name of the file to save with 'mw_save'" )
@@ -651,7 +653,7 @@ local function StartGame( len, pl )
 		net.Start("RestartQueue")
 		net.Send(v)
 		sound.Play( "garrysmod/content_downloaded.wav", v:GetPos()+Vector(0,0,45), 100, 40, 1)
-		MelonPlaySound(pl, "rts_music/1.mp3")
+		MelonPlaySound(v, "rts_music/1.mp3")
 		v:PrintMessage( HUD_PRINTCENTER, "The MelonWars match has begun!" )
 		v:PrintMessage( HUD_PRINTTALK, "/////////////////////////////// The MelonWars match has begun!" )
 	end
@@ -1206,6 +1208,7 @@ end)
 --end)
 
 hook.Add("PlayerSpawnedProp", "MelonPlayerSpawnedProp", function(player, model, entity)
-	entity.melon_playerName = player:Name()
-	print(entity.melon_playerName)
+	local mw_melonTeam = player:GetInfoNum("mw_team", 0)
+	entity:SetNWString("mw_name", player:Name())
+	entity:SetColor(mw_team_colors[mw_melonTeam])
 end)
