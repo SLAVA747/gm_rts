@@ -436,25 +436,23 @@ net.Receive("PlaySound", function(len, pl)
 	surface.PlaySound(sound)
 end)
 
---[[
 hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
 	local trace = LocalPlayer():GetEyeTrace()
 
 	if (IsValid(trace.Entity)) then
 		local entity = trace.Entity
+		local name = entity:GetNWString("mw_name")
 
-		if (entity.melon_playerName != "") then
-			local name = entity.melon_playerName
-
+		if (name) then
 			surface.SetFont("Trebuchet24")
 
 			local width, height = surface.GetTextSize(name)
+
 			surface.SetTextColor(255, 215, 0)
 			surface.SetTextPos(ScrW() / 2 - width / 2, ScrH() / 1.8)
 			surface.DrawText(name)
 		end
 	end
 end)
---]]
 
 -- Музыка на заднем фоне:
