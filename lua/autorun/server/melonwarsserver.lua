@@ -49,6 +49,7 @@ util.AddNetworkString( "DrawWireframeBox" )
 util.AddNetworkString( "ServerSetSpawnpoint" )]]
 
 util.AddNetworkString( "ChatTimer" )
+util.AddNetworkString( "PlaySound" )
 
 --CreateConVar( "mw_save_name", "default", 8192, "Set the name of the file to save with 'mw_save'" )
 --CreateConVar( "mw_save_name_custom", "default", 8192, "Set the name of the file to save with 'mw_save'" )
