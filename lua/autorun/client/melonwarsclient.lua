@@ -451,3 +451,7 @@ hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
 	end
 end)
 --]]
+
+-- Музыка на заднем фоне:
+
+

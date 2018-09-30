@@ -1,6 +1,8 @@
 -- ( Some lines from the cl_spawnmenu.lua in the sandbox GM )
 --function GM:Initialize()
 --Net vars para mandar el equipo y los creditos al cliente
+resource.AddFile("sound/rts_music/1.mp3")
+
 util.AddNetworkString( "MW_TeamCredits" )
 util.AddNetworkString( "MW_TeamUpdate" )
 util.AddNetworkString( "MW_TeamUnits" )
@@ -648,6 +650,7 @@ local function StartGame( len, pl )
 		net.Start("RestartQueue")
 		net.Send(v)
 		sound.Play( "garrysmod/content_downloaded.wav", v:GetPos()+Vector(0,0,45), 100, 40, 1)
+		surface.PlaySound( "rts_music/1.mp3" )
 		v:PrintMessage( HUD_PRINTCENTER, "The MelonWars match has begun!" )
 		v:PrintMessage( HUD_PRINTTALK, "/////////////////////////////// The MelonWars match has begun!" )
 	end
@@ -1182,6 +1185,8 @@ net.Receive( "ServerSetWaypoint", function( len, pl )
 	ent:SetNWInt("path", ent.path)
 end)
 
+
+-- Голосование за смену режима:
 hook.Add("PlayerSay", "MelonPlayerSay", function(player, text, team)
 	if (text:lower() == "!start") then
 		StartGame()
@@ -1198,3 +1203,9 @@ hook.Add("PlayerSpawnedProp", "MelonPlayerSpawnedProp", function(player, model, 
 	entity.melon_playerName = player:Name()
 	print(entity.melon_playerName)
 end)
+
+
+
+
+
+
