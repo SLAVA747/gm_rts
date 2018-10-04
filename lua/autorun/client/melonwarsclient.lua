@@ -459,14 +459,15 @@ end)
 
 --Интерфейс
 
-
-	local Frame = vgui.Create( "DPanel" )
-Frame:SetPos( 5, 5 ) -- Set the position of the panel
-Frame:SetSize(55, 55)
-Frame:SetVisible(true);	
-
+local function test()
+local DermaPanel = vgui.Create( "DFrame" )
+DermaPanel:SetPos( 100, 100 )
+DermaPanel:SetSize( 300, 200 )
+DermaPanel:SetTitle( "My new Derma frame" )
+DermaPanel:SetDraggable( true )
+end
 --Здания 
-
+test()
 
 
  
