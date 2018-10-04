@@ -259,6 +259,7 @@ hook.Add( "HUDPaint", "hud", function()
 						surface.SetDrawColor(Color( 255, 255, 255, 255 ))
 						surface.DrawRect( pos.x - 5 , pos.y - 120, 10, 100 )
 						surface.SetDrawColor(mw_team_colors[i])
+						test(mw_team_colors[i])
 						local capture = v:GetNWInt("captured"..tostring(i), 0)
 						surface.DrawRect( pos.x - 5 , pos.y - 20 - capture, 10 , capture )
 					end
@@ -459,15 +460,34 @@ end)
 
 --Интерфейс
 
-local function test()
-local DermaPanel = vgui.Create( "DFrame" )
-DermaPanel:SetPos( 100, 100 )
-DermaPanel:SetSize( 300, 200 )
-DermaPanel:SetTitle( "My new Derma frame" )
-DermaPanel:SetDraggable( true )
+local function test(TeamColor)
+local DPanel = vgui.Create( "DPanel" )
+DPanel:SetPos( 10, 20 ) -- Set the position of the panel
+DPanel:SetSize( 150, ScrH() - 50 ) -- Set the size of the panel
+DPanel.Paint = function( self, w, h ) -- 'function Frame:Paint( w, h )' works too
+	draw.RoundedBox( 10, 0, 0, w, h, Color( 255, 255, 255, 200 ) ) -- Draw a red box instead of the frame
+	
+	DermaImageButton = vgui.Create( "DImageButton", frame )
+	DermaImageButton:SetPos( 25, 50 )				// Set position
+	DermaImageButton:SetSize( 16, 16 )			// OPTIONAL: Use instead of SizeToContents() if you know/want to fix the size
+	DermaImageButton:SetImage( "icon16/bomb.png" )
+	DermaImageButton.DoClick = function()
+	Msg( "You clicked the image!" )
+	end
+	end
 end
+
+
+-- That way you are overriding the default hook
+-- you can use hook.Add to make more functions get called when this event occurs
+
+hook.Add( "InitPostEntity", "MelonInitPostEntity", function()
+	test()
+end )
+
 --Здания 
-test()
+
+
 
 
  
