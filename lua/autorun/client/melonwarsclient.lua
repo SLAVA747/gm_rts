@@ -433,7 +433,7 @@ end )
 
 net.Receive("PlaySound", function(len, pl)
 	local sound = net.ReadString()
-	surface.PlaySound(sound)
+	surface.PlaySound( sound )
 end)
 
 hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
@@ -455,4 +455,18 @@ hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
 	end
 end)
 
--- Музыка на заднем фоне:
+
+
+--Интерфейс
+
+
+	local Frame = vgui.Create( "DPanel" )
+Frame:SetPos( 5, 5 ) -- Set the position of the panel
+Frame:SetSize(55, 55)
+Frame:SetVisible(true);	
+
+--Здания 
+
+
+
+ 

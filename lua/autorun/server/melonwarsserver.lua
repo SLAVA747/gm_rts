@@ -1,7 +1,23 @@
 -- ( Some lines from the cl_spawnmenu.lua in the sandbox GM )
 --function GM:Initialize()
 --Net vars para mandar el equipo y los creditos al cliente
-resource.AddFile("sound/rts_music/1.mp3")
+--Временная закачка файлов
+-- resource.AddFile("sound/rts_music/1.mp3")
+-- resource.AddFile("sound/rts_music/2.mp3")
+-- resource.AddFile("sound/rts_music/3.mp3")
+-- resource.AddFile("sound/rts_music/4.mp3")
+-- resource.AddFile("sound/rts_music/5.mp3")
+-- resource.AddFile("sound/rts_music/6.mp3")
+-- resource.AddFile("sound/rts_music/7.mp3")
+-- resource.AddFile("sound/rts_music/8.mp3")
+-- resource.AddFile("sound/rts_music/9.mp3")
+-- resource.AddFile("sound/rts_music/10.mp3")
+-- resource.AddFile("sound/rts_music/11.mp3")
+-- resource.AddFile("sound/rts_music/12.mp3")
+-- resource.AddFile("sound/rts_music/13.mp3")
+-- resource.AddFile("sound/rts_music/14.mp3")
+-- resource.AddFile("sound/rts_music/15.mp3")
+-- resource.AddFile("sound/rts_music/16.mp3")
 
 util.AddNetworkString( "MW_TeamCredits" )
 util.AddNetworkString( "MW_TeamUpdate" )
@@ -653,7 +669,7 @@ local function StartGame( len, pl )
 		net.Start("RestartQueue")
 		net.Send(v)
 		sound.Play( "garrysmod/content_downloaded.wav", v:GetPos()+Vector(0,0,45), 100, 40, 1)
-		MelonPlaySound(v, "rts_music/1.mp3")
+		MelonPlaySound(v, "garrysmod/sound/rts_music/1.mp3")
 		v:PrintMessage( HUD_PRINTCENTER, "The MelonWars match has begun!" )
 		v:PrintMessage( HUD_PRINTTALK, "/////////////////////////////// The MelonWars match has begun!" )
 	end
@@ -1212,3 +1228,5 @@ hook.Add("PlayerSpawnedProp", "MelonPlayerSpawnedProp", function(player, model, 
 	entity:SetNWString("mw_name", player:Name())
 	entity:SetColor(mw_team_colors[mw_melonTeam])
 end)
+
+
