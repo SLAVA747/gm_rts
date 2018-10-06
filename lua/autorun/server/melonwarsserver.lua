@@ -157,7 +157,7 @@ net.Receive( "MW_UpdateClientInfo", function( len, pl )
 	local vector_color = Vector(color.r/255, color.g/255, color.b/255)
 	pl:SetPlayerColor(vector_color)
 	pl:SetWeaponColor(vector_color)
-	MelonHUDChange()
+	MelonHUDChange(pl, color)
 end )
 
 net.Receive( "MW_UpdateServerInfo", function( len, pl )
@@ -1232,6 +1232,10 @@ hook.Add("PlayerSpawnedProp", "MelonPlayerSpawnedProp", function(player, model, 
 	entity:SetColor(mw_team_colors[mw_melonTeam])
 end)
 
-function MelonHUDChange()
+function MelonHUDChange(player, color)
+local MelonColor = color;
 net.Start("HUDTeam")
+net.Send(player)
+net.WriteColor(MelonColor)
+print(MelonColor.r)
 end
