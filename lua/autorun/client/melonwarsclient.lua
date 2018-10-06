@@ -433,7 +433,9 @@ end )
 
 net.Receive("PlaySound", function(len, pl)
 	local sound = net.ReadString()
-	surface.PlaySound( sound )
+
+	
+
 end)
 
 hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
@@ -455,19 +457,14 @@ hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
 	end
 end)
 
-
-
 --Интерфейс
 
-local function test()
-local DermaPanel = vgui.Create( "DFrame" )
-DermaPanel:SetPos( 100, 100 )
-DermaPanel:SetSize( 300, 200 )
-DermaPanel:SetTitle( "My new Derma frame" )
-DermaPanel:SetDraggable( true )
-end
---Здания 
-test()
+net.Receive("HUDTeam", function()
+local DPanel = vgui.Create( "DPanel" )
+DPanel:SetPos( 10, 30 ) -- Set the position of the panel
+DPanel:SetSize( 200, 200 ) -- Set the size of the panel
+end)
+
 
 
  
