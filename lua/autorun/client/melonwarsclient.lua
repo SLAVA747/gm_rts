@@ -462,12 +462,11 @@ end)
 net.Receive("HUDTeam", function(len, pl)
 local HUDTeama = vgui.Create( "DPanel" )
 local MelonColor = net.ReadColor(MelonColor)
-
-HUDTeama:SetPos( 10, 30 ) -- Set the position of the panel
-HUDTeama:SetSize( 200, 200 ) -- Set the size of the panel
+HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
+HUDTeama:SetSize( 230, ScrH() - 10 ) -- Set the size of the panel
 HUDTeama:SetBackgroundColor(0,0,0,0)
 HUDTeama.Paint = function()
-draw.RoundedBox(5,10,30,100,100, Color(MelonColor.r,MelonColor.g,MelonColor.b,255))
+draw.RoundedBox(5,10,10,160,ScrH()-20, MelonColor)
 end
 print(MelonColor.r)
 end)

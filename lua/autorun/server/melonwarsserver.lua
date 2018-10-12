@@ -1235,7 +1235,6 @@ end)
 function MelonHUDChange(player, color)
 local MelonColor = color;
 net.Start("HUDTeam")
-net.Send(player)
 net.WriteColor(MelonColor)
-print(MelonColor.r)
+net.Send(player)
 end
