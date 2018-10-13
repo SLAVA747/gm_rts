@@ -259,7 +259,6 @@ hook.Add( "HUDPaint", "hud", function()
 						surface.SetDrawColor(Color( 255, 255, 255, 255 ))
 						surface.DrawRect( pos.x - 5 , pos.y - 120, 10, 100 )
 						surface.SetDrawColor(mw_team_colors[i])
-						test(mw_team_colors[i])
 						local capture = v:GetNWInt("captured"..tostring(i), 0)
 						surface.DrawRect( pos.x - 5 , pos.y - 20 - capture, 10 , capture )
 					end
@@ -460,48 +459,51 @@ end)
 
 --Интерфейс
 
-<<<<<<< HEAD
 net.Receive("HUDTeam", function(len, pl)
-local HUDTeama = vgui.Create( "DPanel" )
-local MelonColor = net.ReadColor(MelonColor)
-HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
-HUDTeama:SetSize( 230, ScrH() - 10 ) -- Set the size of the panel
-HUDTeama:SetBackgroundColor(0,0,0,0)
-HUDTeama.Paint = function()
-draw.RoundedBox(5,10,10,160,ScrH()-20, MelonColor)
-end
-print(MelonColor.r)
+	local icon_jump = 5;
+	local HUDTeama = vgui.Create( "DPanel" )
+	local MelonColor = net.ReadColor(MelonColor)
+	HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
+	HUDTeama:SetSize( 255, ScrH()-20 ) -- Set the size of the panel
+	HUDTeama:SetBackgroundColor(0,0,0,0)
+	HUDTeama.Paint = function()
+		draw.RoundedBox(5,10,5,240,ScrH()-20, MelonColor)
+	end
+	for i=0, 630, 70 do
+		for j=0,150,70 do
+			MelonBuildMenu = vgui.Create( "DImageButton", HUDTeama )
+			if j == 0 then
+				MelonBuildMenu:SetPos( 20+j, 100+i )				// Set position
+			else
+				MelonBuildMenu:SetPos( icon_jump+20+j, 100+i )				// Set position
+				icon_jump=icon_jump+5
+			end
+			MelonBuildMenu:SetSize( 70, 70 )
+			MelonBuildMenu:SetImage( "RTS_MelonWars/JetPack.jpg" )	// Set the material - relative to /materials/ directory
+			--MelonBuildMenu:SizeToContents()				// OPTIONAL: Use instead of SetSize if you want to resize automatically ( without stretching )
+			MelonBuildMenu.DoClick = function()
+				Msg( "You clicked the image!" )
+			end
+		end
+		icon_jump=5	
+	end
+end) 
+
+
+
+-- Отрубаем к херам sandboxсовскую хрень
+--hook.Add('OnContextMenuOpen', 'MelonPlayerDisableContextMenu', function() return false end)
+--hook.Add( "OnSpawnMenuOpen", "MelonPlayerDisableFukingQButton", function() return false end )
+-- Отрубаем HP, бронь, патроны и тд.
+hook.Add( "HUDShouldDraw", "HideHUD", function( name )
+	if ( name == "CHudHealth" or name == "CHudBattery" or name == "CHudAmmo" or name == "CHudSecondaryAmmo" or name == "CHudDeathNotice" or name == "CHudHintDisplay" ) then return false end
 end)
-=======
-local function test(TeamColor)
-local DPanel = vgui.Create( "DPanel" )
-DPanel:SetPos( 10, 20 ) -- Set the position of the panel
-DPanel:SetSize( 150, ScrH() - 50 ) -- Set the size of the panel
-DPanel.Paint = function( self, w, h ) -- 'function Frame:Paint( w, h )' works too
-	draw.RoundedBox( 10, 0, 0, w, h, Color( 255, 255, 255, 200 ) ) -- Draw a red box instead of the frame
-	
-	DermaImageButton = vgui.Create( "DImageButton", frame )
-	DermaImageButton:SetPos( 25, 50 )				// Set position
-	DermaImageButton:SetSize( 16, 16 )			// OPTIONAL: Use instead of SizeToContents() if you know/want to fix the size
-	DermaImageButton:SetImage( "icon16/bomb.png" )
-	DermaImageButton.DoClick = function()
-	Msg( "You clicked the image!" )
-	end
-	end
-end
+
+-- Делаем интерфейс
+-- hook.Add( "Think", "MelonPlayerShowHud", function( ply, key )
+--	if (input.IsKeyDown( KEY_Q ) ) then
+--		print( "hi" )
+--	end
+-- end )
 
 
--- That way you are overriding the default hook
--- you can use hook.Add to make more functions get called when this event occurs
-
-hook.Add( "InitPostEntity", "MelonInitPostEntity", function()
-	test()
-end )
-
---Здания 
-
->>>>>>> 83605138108d1d840d175cd792f5c37ec0ab5e36
-
-
-
- 
