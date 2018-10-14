@@ -21,6 +21,46 @@ hook.Add( "Initialize", "start", function()
 end)
 
 mw_team_colors  = {Color(255,50,50,255),Color(50,50,255,255),Color(255,200,50,255),Color(30,200,30,255),Color(255,50,255,255),Color(100,255,255,255),Color(255,120,0,255),Color(255,100,150,255)}
+mw_icons_id_units = {"RTS_MelonWars/units/1.jpg","RTS_MelonWars/units/2.jpg","RTS_MelonWars/units/3.jpg","RTS_MelonWars/units/4.jpg","RTS_MelonWars/units/5.jpg","RTS_MelonWars/units/6.jpg","RTS_MelonWars/units/7.jpg","RTS_MelonWars/units/8.jpg","RTS_MelonWars/units/9.jpg","RTS_MelonWars/empty.jpg"}
+--[[
+"materials/RTS_MelonWars/Артиллерийское_депо.jpg"
+
+"materials/RTS_MelonWars/Батарея_Б.jpg"
+"materials/RTS_MelonWars/Батарея_М.jpg"
+"materials/RTS_MelonWars/Батарея_С.jpg"
+"materials/RTS_MelonWars/Башня_тесла.jpg"
+"materials/RTS_MelonWars/Большие_ворота.jpg"
+"materials/RTS_MelonWars/Большой_столб.jpg"
+"materials/RTS_MelonWars/Военный_завод.jpg"
+"materials/RTS_MelonWars/Воздушные_войска.jpg"
+"materials/RTS_MelonWars/Ворота.jpg"
+"materials/RTS_MelonWars/Госпиталь.jpg"
+"materials/RTS_MelonWars/Казармы_базутчики.jpg"
+"materials/RTS_MelonWars/Казармы_медики.jpg"
+"materials/RTS_MelonWars/Казармы_пехота.jpg"
+"materials/RTS_MelonWars/Казармы_пулемётчики.jpg"
+"materials/RTS_MelonWars/Казармы_снаперы.jpg"
+"materials/RTS_MelonWars/Казармы_шахиды.jpg"
+"materials/RTS_MelonWars/Лифт.jpg"
+
+
+"materials/RTS_MelonWars/Паровой_двигатель.jpg"
+
+
+"materials/RTS_MelonWars/Радар.jpg"
+
+"materials/RTS_MelonWars/Солнечная_батарея.jpg"
+"materials/RTS_MelonWars/Столб.jpg"
+"materials/RTS_MelonWars/Тумблер.jpg"
+"materials/RTS_MelonWars/Турель.jpg"
+"materials/RTS_MelonWars/Ускоритель.jpg"
+
+"materials/RTS_MelonWars/Шредер.jpg"
+
+"materials/RTS_MelonWars/Ядерная_шахта.jpg"
+"materials/RTS_MelonWars/Ядерный_реактор.jpg"
+]]
+ 
 
 hook.Add( "Think", "update", function()	
 	if (mw_selecting) then
@@ -31,7 +71,7 @@ hook.Add( "Think", "update", function()
 	local ent = tr.Entity
 	if (ent:GetNWString("message", "nope") != "nope") then
         AddWorldTip( nil,ent:GetNWString("message", "nope"), nil, Vector(0,0,0), ent )
-    end
+    end 
 end)
 
 net.Receive( "Selection", function( len, pl )
@@ -461,31 +501,44 @@ end)
 
 net.Receive("HUDTeam", function(len, pl)
 	local icon_jump = 5;
+	local icon_jump_up=5;
+	local id_cost = 0;
 	local HUDTeama = vgui.Create( "DPanel" )
 	local MelonColor = net.ReadColor(MelonColor)
 	HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
 	HUDTeama:SetSize( 255, ScrH()-20 ) -- Set the size of the panel
 	HUDTeama:SetBackgroundColor(0,0,0,0)
 	HUDTeama.Paint = function()
-		draw.RoundedBox(5,10,5,240,ScrH()-20, MelonColor)
+		draw.RoundedBox(5,8,3,242,ScrH()-26, Color(0,0,0))
+		draw.RoundedBox(5,10,5,237,ScrH()-30, MelonColor)
 	end
-	for i=0, 630, 70 do
+	for i=0, 350, 70 do
 		for j=0,150,70 do
+		id_cost=id_cost+1
+		if id_cost > 9 then
+			id_cost=10
+		end
 			MelonBuildMenu = vgui.Create( "DImageButton", HUDTeama )
 			if j == 0 then
-				MelonBuildMenu:SetPos( 20+j, 100+i )				// Set position
+				MelonBuildMenu:SetPos( 20+j, 100+i+icon_jump_up )				// Set position
 			else
-				MelonBuildMenu:SetPos( icon_jump+20+j, 100+i )				// Set position
+				MelonBuildMenu:SetPos( icon_jump+20+j, 100+i+icon_jump_up )				// Set position
 				icon_jump=icon_jump+5
 			end
 			MelonBuildMenu:SetSize( 70, 70 )
-			MelonBuildMenu:SetImage( "RTS_MelonWars/JetPack.jpg" )	// Set the material - relative to /materials/ directory
+			MelonBuildMenu:SetImage( mw_icons_id_units[id_cost] )	// Set the material - relative to /materials/ directory
 			--MelonBuildMenu:SizeToContents()				// OPTIONAL: Use instead of SetSize if you want to resize automatically ( without stretching )
 			MelonBuildMenu.DoClick = function()
-				Msg( "You clicked the image!" )
+				local pl = LocalPlayer()
+					LocalPlayer():ConCommand("mw_chosen_unit "..tostring(id_cost)) 
+					LocalPlayer():ConCommand("mw_action 1")
+					pl.mw_frame:Remove()
+					pl.mw_frame = nil
+					print(tostring(id_cost))
+				end
 			end
-		end
 		icon_jump=5	
+		icon_jump_up=icon_jump_up+5;
 	end
 end) 
 
