@@ -534,7 +534,6 @@ net.Receive("HUDTeam", function(len, pl)
 					LocalPlayer():ConCommand("mw_action 1")
 					pl.mw_frame:Remove()
 					pl.mw_frame = nil
-					print(tostring(id_cost))
 				end
 			end
 		icon_jump=5	
@@ -542,7 +541,12 @@ net.Receive("HUDTeam", function(len, pl)
 	end
 end) 
 
-
+function myfunc() if input.IsKeyDown( KEY_P ) then 
+	local pl = LocalPlayer()
+      HUDTeama:SetVisible(false)
+end
+end 
+hook.Add("Think","twsgsh",myfunc)
 
 -- Отрубаем к херам sandboxсовскую хрень
 --hook.Add('OnContextMenuOpen', 'MelonPlayerDisableContextMenu', function() return false end)
