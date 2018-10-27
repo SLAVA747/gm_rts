@@ -1,3 +1,4 @@
+
 hook.Add( "Initialize", "start", function()
 	LocalPlayer().mw_selecting = 1
 	LocalPlayer().mw_selStart = Vector(0,0,0)
@@ -19,6 +20,7 @@ hook.Add( "Initialize", "start", function()
 
 	return true 
 end)
+
 
 mw_team_colors  = {Color(255,50,50,255),Color(50,50,255,255),Color(255,200,50,255),Color(30,200,30,255),Color(255,50,255,255),Color(100,255,255,255),Color(255,120,0,255),Color(255,100,150,255)}
 mw_icons_id_units = {"RTS_MelonWars/units/1.jpg","RTS_MelonWars/units/2.jpg","RTS_MelonWars/units/3.jpg","RTS_MelonWars/units/4.jpg","RTS_MelonWars/units/5.jpg","RTS_MelonWars/units/6.jpg","RTS_MelonWars/units/7.jpg","RTS_MelonWars/units/8.jpg","RTS_MelonWars/units/9.jpg","RTS_MelonWars/empty.jpg"}
@@ -498,12 +500,22 @@ hook.Add("HUDDrawTargetID", "MelonHUDDrawTargetID", function()
 end)
 
 --Интерфейс
+function i_take_my_water(my_water_take)
+my_water = my_water_take;
+end
+function i_take_my_food(my_food_take)
+my_food = my_food_take;
+end
 
 net.Receive("HUDTeam", function(len, pl)
-	local icon_jump = 5;
+if (HUDTeama) then
+HUDTeama:Remove()
+end
+	local icon_jump = 1;
+	local pl = LocalPlayer()
 	local icon_jump_up=5;
 	local id_cost = 0;
-	local HUDTeama = vgui.Create( "DPanel" )
+	HUDTeama = vgui.Create( "DPanel" )
 	local MelonColor = net.ReadColor(MelonColor)
 	HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
 	HUDTeama:SetSize( 255, ScrH()-20 ) -- Set the size of the panel
@@ -512,40 +524,114 @@ net.Receive("HUDTeam", function(len, pl)
 		draw.RoundedBox(5,8,3,242,ScrH()-26, Color(0,0,0))
 		draw.RoundedBox(5,10,5,237,ScrH()-30, MelonColor)
 	end
-	for i=0, 350, 70 do
+	
+
+	-- Settings menu
+local Status_Panel = vgui.Create( "DPanel", HUDTeama )
+Status_Panel:SetPos( 5, 5 )
+Status_Panel:SetSize( 255, 40)
+Status_Panel.Paint = function()
+		draw.RoundedBox(0,8,3,231,36, Color(0,0,0))
+		draw.RoundedBox(0,10,5,226,32, Color(255,255,255,255))
+		draw.RoundedBox(0,8,3,40,36, Color(0,0,0))
+		draw.RoundedBox(0,10,5,36,32, Color(255,255,255,255))
+		
+
+
+	end
+Settings_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+Settings_img:SetPos( 10, 6 )	-- Move it into frame
+Settings_img:SetSize( 30, 30 )	-- Size it to 150x150
+Settings_img:SetImage( "materials/RTS_MelonWars/icon/5.png" )
+
+
+
+
+
+
+
+
+
+
+	-- units menu
+	local Buld_menu = vgui.Create("DPanel", HUDTeama )
+			local DScrollPanel = vgui.Create( "DScrollPanel", Buld_menu )
+			Buld_menu:SetPos( 5, 300 )
+			Buld_menu:SetSize( 240, ScrH()-370)
+			Buld_menu.Paint = function()
+			draw.RoundedBox(5,8,3,231,ScrH()-371, Color(0,0,0))
+			draw.RoundedBox(5,10,5,227,ScrH()-377, MelonColor)
+			end
+			 DScrollPanel:SetSize( 235, ScrH()-377 )
+			
+	for i=0, 700, 70 do
 		for j=0,150,70 do
 		id_cost=id_cost+1
 		if id_cost > 9 then
 			id_cost=10
 		end
-			MelonBuildMenu = vgui.Create( "DImageButton", HUDTeama )
+			local MelonBuildMenu = DScrollPanel:Add( "DImageButton")
 			if j == 0 then
-				MelonBuildMenu:SetPos( 20+j, 100+i+icon_jump_up )				// Set position
+				MelonBuildMenu:SetPos( 13+j, 10+i+icon_jump_up )				// Set position
 			else
-				MelonBuildMenu:SetPos( icon_jump+20+j, 100+i+icon_jump_up )				// Set position
-				icon_jump=icon_jump+5
+				MelonBuildMenu:SetPos( icon_jump+13+j, 10+i+icon_jump_up )				// Set position
+				icon_jump=icon_jump+1
 			end
-			MelonBuildMenu:SetSize( 70, 70 )
+			MelonBuildMenu:SetSize( 65, 65 )
 			MelonBuildMenu:SetImage( mw_icons_id_units[id_cost] )	// Set the material - relative to /materials/ directory
-			--MelonBuildMenu:SizeToContents()				// OPTIONAL: Use instead of SetSize if you want to resize automatically ( without stretching )
 			MelonBuildMenu.DoClick = function()
-				local pl = LocalPlayer()
 					LocalPlayer():ConCommand("mw_chosen_unit "..tostring(id_cost)) 
 					LocalPlayer():ConCommand("mw_action 1")
 					pl.mw_frame:Remove()
 					pl.mw_frame = nil
 				end
 			end
-		icon_jump=5	
+		icon_jump=1	
 		icon_jump_up=icon_jump_up+5;
 	end
-end) 
+	-- Meat and water menu
+Status_Panel = vgui.Create( "DPanel", HUDTeama )
+Status_Panel:SetPos( 10, ScrH()-68 )
+Status_Panel:SetSize( 255, 40)
+Status_Panel.Paint = function()
+		draw.RoundedBox(0,8,3,226,36, Color(0,0,0))
+		draw.RoundedBox(0,10,5,221,32, Color(255,255,255,255))
+		draw.RoundedBox(0,8,3,112,36, Color(0,0,0))
+		draw.RoundedBox(0,10,5,107,32, Color(255,255,255,255))
+		
+		draw.DrawText( tostring(my_water), "CloseCaption_Bold", 72, 8, Color(0,0,0,255), TEXT_ALIGN_CENTER )
+		draw.DrawText( tostring(my_food).."/"..tostring(cvars.Number("mw_admin_max_units")), "CloseCaption_Bold", 185, 8,  Color(0,0,0,255), TEXT_ALIGN_CENTER )
+				
+	end
+local Water_img = vgui.Create( "DImage", Status_Panel )	-- Add image to Frame
+Water_img:SetPos( 10, 12 )	-- Move it into frame
+Water_img:SetSize( 20, 20 )	-- Size it to 150x150
+Water_img:SetImage( "materials/RTS_MelonWars/icon/1.png" )
+local Meat_img = vgui.Create( "DImage", Status_Panel )	-- Add image to Frame
+Meat_img:SetPos( 120, 12 )	-- Move it into frame
+Meat_img:SetSize( 20, 20 )	-- Size it to 150x150
+Meat_img:SetImage( "materials/RTS_MelonWars/icon/2.png" )
 
-function myfunc() if input.IsKeyDown( KEY_P ) then 
+
+
+
+end) 
+-- F1 в помощь
+function myfunc() if input.IsKeyDown( KEY_F1 ) then 
 	local pl = LocalPlayer()
-      HUDTeama:SetVisible(false)
+	local Hide_Hud = true;
+	  if HUDTeama then
+		if (HUDTeama:Hide(false)) then
+		HUDTeama:Hide(true)
+		print ("скрыл")
+		else
+		HUDTeama:Hide(false)
 end
-end 
+end
+end
+end
+
+
 hook.Add("Think","twsgsh",myfunc)
 
 -- Отрубаем к херам sandboxсовскую хрень

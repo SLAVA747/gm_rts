@@ -18,20 +18,20 @@ TOOL.ClientConVar[ "mw_team" ] = 1
 CreateClientConVar( "mw_contraption_name", "default", 0, false )
 TOOL.ClientConVar[ "mw_contraption_name" ] = "default"
 
-CreateConVar( "mw_admin_spawn_time", "0", 8192, "Whether or not units take time before spawning" )
-TOOL.ClientConVar[ "mw_admin_spawn_time" ] = 0
-CreateConVar( "mw_admin_move_any_team", "1", 8192, "If true, everyone can move any melon" )
-TOOL.ClientConVar[ "mw_admin_move_any_team" ] = 1
-CreateConVar( "mw_admin_allow_free_placing", "1", 8192, "If true, melons can be spawned anywhere" )
-TOOL.ClientConVar[ "mw_admin_allow_free_placing" ] = 1
+CreateConVar( "mw_admin_spawn_time", "1", 8192, "Whether or not units take time before spawning" )
+TOOL.ClientConVar[ "mw_admin_spawn_time" ] = 1
+CreateConVar( "mw_admin_move_any_team", "0", 8192, "If true, everyone can move any melon" )
+TOOL.ClientConVar[ "mw_admin_move_any_team" ] = 0
+CreateConVar( "mw_admin_allow_free_placing", "0", 8192, "If true, melons can be spawned anywhere" )
+TOOL.ClientConVar[ "mw_admin_allow_free_placing" ] = 0
 CreateConVar( "mw_admin_playing", "1", 8192, "If false, players cant play and income stops" )
 TOOL.ClientConVar[ "mw_admin_playing" ] = 1
 CreateConVar( "mw_admin_cutscene", "0", 8192, "Used in the singleplayer mode" )
 TOOL.ClientConVar[ "mw_admin_cutscene" ] = 0
-CreateConVar( "mw_admin_credit_cost", "0", 8192, "If false, units are free" )
+CreateConVar( "mw_admin_credit_cost", "1", 8192, "If false, units are free" )
 TOOL.ClientConVar[ "mw_admin_credit_cost" ] = 1
-CreateConVar( "mw_admin_max_units", "100", 8192, "The max ammount of melons per team" )
-TOOL.ClientConVar[ "mw_admin_max_units" ] = 100
+CreateConVar( "mw_admin_max_units", "300", 8192, "The max ammount of melons per team" )
+TOOL.ClientConVar[ "mw_admin_max_units" ] = 300
 CreateConVar( "mw_admin_starting_credits", "2000", 8192, "The starting credits for a match" )
 TOOL.ClientConVar[ "mw_admin_max_units" ] = 2000
 CreateConVar( "mw_admin_allow_manual_placing", "1", 8192, "If false, you can place units directly with the toolgun" )
@@ -44,8 +44,8 @@ TOOL.ClientConVar[ "mw_prop_offset" ] = 1
 CreateClientConVar( "mw_prop_snap", "1", 0, false )
 TOOL.ClientConVar[ "mw_prop_snap" ] = 1
 
-CreateClientConVar( "mw_action", "0", 0, true )
-TOOL.ClientConVar[ "mw_action" ] = 0
+CreateClientConVar( "mw_action", "1", 0, true )
+TOOL.ClientConVar[ "mw_action" ] = 1
 //}
 mw_team_colors  = {Color(255,50,50,255),Color(50,50,255,255),Color(255,200,50,255),Color(30,200,30,255),Color(100,0,80,255),Color(100,255,255,255),Color(255,120,0,255),Color(255,100,150,255)}
 local button_energy_color = Color(255, 255, 80)
@@ -3024,7 +3024,7 @@ group to find MelonWars players!]],
 			local unit_id = cvars.Number("mw_chosen_unit")
 			
 			if (math.floor(LocalPlayer().mw_spawntime-CurTime()) > 0) then
-				draw.DrawText( "Spawning Queue: "..math.floor(LocalPlayer().mw_spawntime-CurTime()), "DermaLarge", ScrW()/2, ScrH()-80, Color(255,255,255,255), TEXT_ALIGN_CENTER )
+				draw.DrawText( "Идёт строительство: "..math.floor(LocalPlayer().mw_spawntime-CurTime()) .. " сек.", "CloseCaption_Bold", ScrW()/2, ScrH()-80, Color(255,255,255,255), TEXT_ALIGN_CENTER )
 			end
 
 			local cheats = false
@@ -3096,10 +3096,11 @@ to start a game and turn off cheats]]
 						if (mw_units[unit_id].welded_cost ~= -1) then
 							draw.DrawText( "Welded Cost (RMB): "..mw_units[unit_id].welded_cost, "Trebuchet18", x+30, y+130, Color(255,255,255,255), TEXT_ALIGN_LEFT )
 						end
-						draw.DrawText( "Water: "..tostring(self:GetOwner().mw_credits), "DermaLarge", x+30, y+160, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+						i_take_my_water(self:GetOwner().mw_credits)
+						--draw.DrawText( "Water: "..tostring(self:GetOwner().mw_credits), "DermaLarge", x+30, y+160, Color(255,255,255,255), TEXT_ALIGN_LEFT )
 					end
-					draw.DrawText( "Power: "..tostring(self:GetOwner().mw_units).." / "..tostring(cvars.Number("mw_admin_max_units")), "DermaLarge", x+30, y+200, Color(255,255,255,255), TEXT_ALIGN_LEFT )
-					
+					--draw.DrawText( "Power: "..tostring(self:GetOwner().mw_units).." / "..tostring(cvars.Number("mw_admin_max_units")), "DermaLarge", x+30, y+200, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+					i_take_my_food(self:GetOwner().mw_units)	
 					draw.DrawText( "R: Open menu", "DermaLarge", x+w-10, y-120, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 					draw.DrawText( "LMB: Spawn", "DermaLarge", x+w-10, y-80, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 					draw.DrawText( "RMB: Cancel", "DermaLarge", x+w-10, y-40, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
@@ -3154,7 +3155,7 @@ to start a game and turn off cheats]]
 				local x = ScrW()-w
 				local y = ScrH()-h
 				
-				draw.DrawText( "R: Open menu", "DermaLarge", x+w-10, y-235, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
+				--draw.DrawText( "R: Open menu", "DermaLarge", x+w-10, y-235, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 				draw.DrawText( "LMB (Hold and drag): Select", "DermaLarge", x+w-10, y-195, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 				draw.DrawText( "LMB double click: Select unit type", "CloseCaption_Normal", x+w-10, y-165, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 				draw.DrawText( "Hold Shift to add to selection", "CloseCaption_Normal", x+w-10, y-145, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
@@ -3164,15 +3165,16 @@ to start a game and turn off cheats]]
 				draw.DrawText( "Left Ctrl: Stop selected units", "CloseCaption_Normal", x+w-10, y-45, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 				draw.DrawText( "Left Ctrl + RMB: Disperse", "CloseCaption_Normal", x+w-10, y-25, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
 				
-				draw.RoundedBox( 15, x, y, w, h, teamColor )
-				draw.RoundedBox( 10, x+10, y+10, w-20, h-20, Color(0,0,0,230) )
+				--draw.RoundedBox( 15, x, y, w, h, teamColor )
+				--draw.RoundedBox( 10, x+10, y+10, w-20, h-20, Color(0,0,0,230) )
 				if (freeunits) then
 					draw.DrawText( "- Infinite Water -", "Trebuchet18", x+w/2, y+20, Color(255,255,255,255), TEXT_ALIGN_CENTER )
 					draw.DrawText( "To enable water cost go to the admin menu", "Trebuchet18", x+w/2, y+40, Color(255,255,255,255), TEXT_ALIGN_CENTER )
 				else
-					draw.DrawText( "Water: "..tostring(self:GetOwner().mw_credits), "DermaLarge", x+30, y+30, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+					--draw.DrawText( "Water: "..tostring(self:GetOwner().mw_credits), "DermaLarge", x+30, y+30, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+					i_take_my_water(self:GetOwner().mw_credits)
 				end
-				draw.DrawText( "Power: "..tostring(self:GetOwner().mw_units).." / "..tostring(cvars.Number("mw_admin_max_units")), "DermaLarge", x+30, y+70, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+				--draw.DrawText( "Power: "..tostring(self:GetOwner().mw_units).." / "..tostring(cvars.Number("mw_admin_max_units")), "DermaLarge", x+30, y+70, Color(255,255,255,255), TEXT_ALIGN_LEFT )
 			elseif(pl.mw_action == 3) then
 			
 				local prop_id = self:GetOwner():GetInfoNum("mw_chosen_prop", 1)
