@@ -967,37 +967,37 @@ function TOOL:Reload()
 		local pl = LocalPlayer()
 
 		//{ CREATE FRAME
-		if (pl.mw_frame == nil) then
-			pl.mw_frame = vgui.Create("DFrame")
-			pl.mw_frame:SetSize(w,h)
-			pl.mw_frame:SetPos(ScrW()/2-w/2+150,ScrH()/2-h/3)
-			pl.mw_frame:SetTitle("Melon Wars")
-			pl.mw_frame:MakePopup()
-			pl.mw_frame:ShowCloseButton()
-			local button = vgui.Create("DButton", pl.mw_frame)
-			button:SetSize(90,18)
-			button:SetPos(w-93,3)
-			button:SetText("Press R to close")
-			function button:DoClick()
-				pl.mw_frame:Remove()
-				pl.mw_frame = nil
-			end
+		--if (pl.mw_frame == nil) then
+			--pl.mw_frame = vgui.Create("DFrame")
+			--pl.mw_frame:SetSize(w,h)
+			--pl.mw_frame:SetPos(ScrW()/2-w/2+150,ScrH()/2-h/3)
+			--pl.mw_frame:SetTitle("Melon Wars")
+			--pl.mw_frame:MakePopup()
+			--pl.mw_frame:ShowCloseButton()
+			--local button = vgui.Create("DButton", pl.mw_frame)
+			--button:SetSize(90,18)
+			--button:SetPos(w-93,3)
+			---button:SetText("Press R to close")
+			--function button:DoClick()
+			--	pl.mw_frame:Remove()
+			--	pl.mw_frame = nil
+			--end
 			
-			_CreatePanel()
+			--_CreatePanel()
 
-			local h = 70
-			self:MenuButton(pl, 30+h*0, h, "Units", 0)
-			self:MenuButton(pl, 30+h*1, h, "Buildings", 1)
-			self:MenuButton(pl, 30+h*2, h, "Base", 2)
-			self:MenuButton(pl, 30+h*3, h, "Energy", 3)
-			self:MenuButton(pl, 30+h*4, h, "Contrap.", 4)
+			--local h = 70
+			--self:MenuButton(pl, 30+h*0, h, "Units", 0)
+			--self:MenuButton(pl, 30+h*1, h, "Buildings", 1)
+			--self:MenuButton(pl, 30+h*2, h, "Base", 2)
+			--self:MenuButton(pl, 30+h*3, h, "Energy", 3)
+			--self:MenuButton(pl, 30+h*4, h, "Contrap.", 4)
 
-			self:MenuButton(pl, 400, 30, "Help", 6)
-			self:MenuButton(pl, 430, 30, "Team", 5)
-			self:MenuButton(pl, 460, 30, "Admin", 7)
+			--self:MenuButton(pl, 400, 30, "Help", 6)
+			--self:MenuButton(pl, 430, 30, "Team", 5)
+			--self:MenuButton(pl, 460, 30, "Admin", 7)
 
-			button:SetEnabled( pl:IsAdmin() )
-		end
+			--button:SetEnabled( pl:IsAdmin() )
+		--end
 		//}
 	end
 end
@@ -2350,7 +2350,7 @@ function TOOL:Deploy ()
 				net.WriteInt(mw_teamUnits[_team] ,16)
 			net.Send(self:GetOwner())
 		end
-		self:GetOwner():PrintMessage( HUD_PRINTCENTER, "Press R to open the menu" )
+		--self:GetOwner():PrintMessage( HUD_PRINTCENTER, "Press R to open the menu" )
 	end
 end
 
@@ -2639,7 +2639,7 @@ function TOOL:Think()
 		local newColor = Color(200,200,200,255)
 
 		if (!ply.disableKeyboard) then
-			if (input.IsKeyDown( KEY_R )) then
+			if (input.IsKeyDown( KEY_T )) then
 				if (self.rPressed == nil) then
 					self.rPressed = false
 				end

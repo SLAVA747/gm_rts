@@ -135,6 +135,7 @@ teamUnlocks = {0,0,0,0,0,0,0,0}
 
 teamgrid = {}
 
+
 local function spawn( ply )
 	ply.mw_hover = 0
 	ply.mw_menu = 0

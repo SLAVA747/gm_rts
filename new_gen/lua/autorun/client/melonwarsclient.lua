@@ -67,12 +67,12 @@ local Team_Panel = vgui.Create( "DPanel" )
 					draw.RoundedBox( 4, 2, 2, w-4, h-4, mw_team_colors[i] )
 				end
 			end
-
+		
 end
 
 
 mw_team_colors  = {Color(255,50,50,255),Color(50,50,255,255),Color(255,200,50,255),Color(30,200,30,255),Color(255,50,255,255),Color(100,255,255,255),Color(255,120,0,255),Color(255,100,150,255)}
-mw_icons_id_units = {"RTS_MelonWars/units/1.jpg","RTS_MelonWars/units/2.jpg","RTS_MelonWars/units/3.jpg","RTS_MelonWars/units/4.jpg","RTS_MelonWars/units/5.jpg","RTS_MelonWars/units/6.jpg","RTS_MelonWars/units/7.jpg","RTS_MelonWars/units/8.jpg","RTS_MelonWars/units/9.jpg","RTS_MelonWars/empty.jpg"}
+mw_icons_id_units = {"RTS_MelonWars/units/1.jpg","RTS_MelonWars/units/2.jpg","RTS_MelonWars/units/3.jpg","RTS_MelonWars/units/4.jpg","RTS_MelonWars/units/5.jpg","RTS_MelonWars/units/6.jpg","RTS_MelonWars/units/7.jpg","RTS_MelonWars/units/8.jpg","RTS_MelonWars/units/9.jpg","RTS_MelonWars/buildings/1.jpg","RTS_MelonWars/buildings/2.jpg","RTS_MelonWars/buildings/3.jpg","RTS_MelonWars/buildings/4.jpg","RTS_MelonWars/buildings/5.jpg","RTS_MelonWars/buildings/6.jpg","RTS_MelonWars/buildings/7.jpg","RTS_MelonWars/buildings/8.jpg","RTS_MelonWars/buildings/9.jpg","RTS_MelonWars/buildings/10.jpg","RTS_MelonWars/buildings/11.jpg","RTS_MelonWars/buildings/12.jpg","RTS_MelonWars/buildings/13.jpg","RTS_MelonWars/buildings/14.jpg","RTS_MelonWars/buildings/15.jpg","RTS_MelonWars/buildings/16.jpg","RTS_MelonWars/buildings/17.jpg","RTS_MelonWars/buildings/18.jpg","RTS_MelonWars/buildings/19.jpg","RTS_MelonWars/energy/1.jpg","RTS_MelonWars/energy/2.jpg","RTS_MelonWars/energy/3.jpg","RTS_MelonWars/energy/4.jpg","RTS_MelonWars/energy/5.jpg","RTS_MelonWars/energy/6.jpg","RTS_MelonWars/energy/7.jpg","RTS_MelonWars/energy/8.jpg","RTS_MelonWars/energy/9.jpg"}
 --[[
 "materials/RTS_MelonWars/Артиллерийское_депо.jpg"
 
@@ -556,69 +556,84 @@ function i_take_my_food(my_food_take)
 my_food = my_food_take;
 end
 
-net.Receive("HUDTeam", function(len, pl)
-if (HUDTeama) then
-HUDTeama:Remove()
-end
+
+-- Wall Menu
+function Create_Wall_Menu()
 	local icon_jump = 1;
 	local pl = LocalPlayer()
 	local icon_jump_up=5;
 	local id_cost = 0;
-	HUDTeama = vgui.Create( "DPanel" )
-	local MelonColor = net.ReadColor(MelonColor)
-	HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
-	HUDTeama:SetSize( 255, ScrH()-20 ) -- Set the size of the panel
-	HUDTeama:SetBackgroundColor(0,0,0,0)
-	HUDTeama.Paint = function()
-		draw.RoundedBox(5,8,3,242,ScrH()-26, Color(0,0,0))
-		draw.RoundedBox(5,10,5,237,ScrH()-30, MelonColor)
-	end
 	
-
-	-- Settings menu
-local Status_Panel = vgui.Create( "DPanel", HUDTeama )
-Status_Panel:SetPos( 5, 5 )
-Status_Panel:SetSize( 255, 40)
-Status_Panel.Paint = function()
-		draw.RoundedBox(0,8,3,231,36, Color(0,0,0))
-		draw.RoundedBox(0,10,5,226,32, Color(255,255,255,255))
-		draw.RoundedBox(0,8,3,40,36, Color(0,0,0))
-		draw.RoundedBox(0,10,5,36,32, Color(255,255,255,255))
-		
-
-
-	end
-Settings_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
-Settings_img:SetPos( 10, 6 )	-- Move it into frame
-Settings_img:SetSize( 30, 30 )	-- Size it to 150x150
-Settings_img:SetImage( "materials/RTS_MelonWars/icon/5.png" )
-
-
-
-
-
-
-
-
-
-
-	-- units menu
-	local Buld_menu = vgui.Create("DPanel", HUDTeama )
-			local DScrollPanel = vgui.Create( "DScrollPanel", Buld_menu )
-			Buld_menu:SetPos( 5, 300 )
-			Buld_menu:SetSize( 240, ScrH()-370)
-			Buld_menu.Paint = function()
+	
+Wall_menu = vgui.Create("DPanel", HUDTeama )
+			local DScrollPanel = vgui.Create( "DScrollPanel", Wall_menu )
+			Wall_menu:SetPos( 5, 300 )
+			Wall_menu:SetSize( 240, ScrH()-370)
+			Wall_menu.Paint = function()
 			draw.RoundedBox(5,8,3,231,ScrH()-371, Color(0,0,0))
 			draw.RoundedBox(5,10,5,227,ScrH()-377, MelonColor)
 			end
 			 DScrollPanel:SetSize( 235, ScrH()-377 )
 			
-	for i=0, 700, 70 do
+	for i=0, 490, 70 do
 		for j=0,150,70 do
 		id_cost=id_cost+1
-		if id_cost > 9 then
-			id_cost=10
+		if id_cost > 37 then
+		break
 		end
+		local selected_unit=id_cost
+	
+				ListItem = DScrollPanel:Add( "SpawnIcon" ) //Add DPanel to the DIconLayout
+				ListItem:SetSize( 65, 65 )
+				if j == 0 then
+				ListItem:SetPos( 13+j, 10+i+icon_jump_up )				// Set position
+			else
+				ListItem:SetPos( icon_jump+13+j, 10+i+icon_jump_up )				// Set position
+				icon_jump=icon_jump+1
+			end
+				ListItem:SetModel(mw_base_props[id_cost].model)
+				function ListItem:DoClick()
+					pl:ConCommand("mw_chosen_prop "..tostring(selected_unit))
+					pl:ConCommand("mw_action 3")
+				end
+				
+	
+			
+		icon_jump=1	
+		icon_jump_up=icon_jump_up+5;
+	end
+	
+end
+end
+
+
+-- Energy
+function Create_Energy_Menu()
+	local icon_jump = 1;
+	local pl = LocalPlayer()
+	local icon_jump_up=5;
+	local id_cost = 28;
+	
+	
+Energy_menu = vgui.Create("DPanel", HUDTeama )
+			local DScrollPanel = vgui.Create( "DScrollPanel", Energy_menu )
+			Energy_menu:SetPos( 5, 300 )
+			Energy_menu:SetSize( 240, ScrH()-370)
+			Energy_menu.Paint = function()
+			draw.RoundedBox(5,8,3,231,ScrH()-371, Color(0,0,0))
+			draw.RoundedBox(5,10,5,227,ScrH()-377, MelonColor)
+			end
+			 DScrollPanel:SetSize( 235, ScrH()-377 )
+			
+	for i=0, 420, 70 do
+		for j=0,150,70 do
+		id_cost=id_cost+1
+		if id_cost > 37 then
+		break
+		end
+		local selected_unit=id_cost
+	
+	
 			local MelonBuildMenu = DScrollPanel:Add( "DImageButton")
 			if j == 0 then
 				MelonBuildMenu:SetPos( 13+j, 10+i+icon_jump_up )				// Set position
@@ -629,15 +644,278 @@ Settings_img:SetImage( "materials/RTS_MelonWars/icon/5.png" )
 			MelonBuildMenu:SetSize( 65, 65 )
 			MelonBuildMenu:SetImage( mw_icons_id_units[id_cost] )	// Set the material - relative to /materials/ directory
 			MelonBuildMenu.DoClick = function()
-					LocalPlayer():ConCommand("mw_chosen_unit "..tostring(id_cost)) 
+					LocalPlayer():ConCommand("mw_chosen_unit "..tostring(selected_unit)) 
 					LocalPlayer():ConCommand("mw_action 1")
-					pl.mw_frame:Remove()
-					pl.mw_frame = nil
+				end
+			
+		end		
+			
+		icon_jump=1	
+		icon_jump_up=icon_jump_up+5;	
+	end
+	
+end
+
+--Buldings menu
+function Create_Buldings_Menu()
+	local icon_jump = 1;
+	local pl = LocalPlayer()
+	local icon_jump_up=5;
+	local id_cost = 9;
+
+	
+Buldings_menu = vgui.Create("DPanel", HUDTeama )
+			local DScrollPanel = vgui.Create( "DScrollPanel", Buldings_menu )
+			Buldings_menu:SetPos( 5, 300 )
+			Buldings_menu:SetSize( 240, ScrH()-370)
+			Buldings_menu.Paint = function()
+			draw.RoundedBox(5,8,3,231,ScrH()-371, Color(0,0,0))
+			draw.RoundedBox(5,10,5,227,ScrH()-377, MelonColor)
+			end
+			 DScrollPanel:SetSize( 235, ScrH()-377 )
+			
+	for i=0, 420, 70 do
+		for j=0,150,70 do
+		id_cost=id_cost+1
+		if id_cost > 28 then
+		break
+		end
+		local selected_unit=id_cost
+		
+	
+			local MelonBuildMenu = DScrollPanel:Add( "DImageButton")
+			if j == 0 then
+				MelonBuildMenu:SetPos( 13+j, 10+i+icon_jump_up )				// Set position
+			else
+				MelonBuildMenu:SetPos( icon_jump+13+j, 10+i+icon_jump_up )				// Set position
+				icon_jump=icon_jump+1
+			end
+			MelonBuildMenu:SetSize( 65, 65 )
+			MelonBuildMenu:SetImage( mw_icons_id_units[id_cost] )	// Set the material - relative to /materials/ directory
+			MelonBuildMenu.DoClick = function()
+					LocalPlayer():ConCommand("mw_chosen_unit "..tostring(selected_unit)) 
+					LocalPlayer():ConCommand("mw_action 1")
+				end
+		end		
+			
+		icon_jump=1	
+		icon_jump_up=icon_jump_up+5;
+	end
+	
+end
+
+
+
+--Units menu
+function Create_Units_Menu()
+	local icon_jump = 1;
+	local pl = LocalPlayer()
+	local icon_jump_up=5;
+	local id_cost = 0;
+	if (Buld_menu) then
+	Buld_menu:Remove()
+	end
+	
+Buld_menu = vgui.Create("DPanel", HUDTeama )
+			local DScrollPanel = vgui.Create( "DScrollPanel", Buld_menu )
+			Buld_menu:SetPos( 5, 300 )
+			Buld_menu:SetSize( 240, ScrH()-370)
+			Buld_menu.Paint = function()
+			draw.RoundedBox(5,8,3,231,ScrH()-371, Color(0,0,0))
+			draw.RoundedBox(5,10,5,227,ScrH()-377, MelonColor)
+			end
+			 DScrollPanel:SetSize( 235, ScrH()-377 )
+			
+	for i=0, 140, 70 do
+		for j=0,150,70 do
+		id_cost=id_cost+1
+		local selected_unit=id_cost
+			local MelonBuildMenu = DScrollPanel:Add( "DImageButton")
+			if j == 0 then
+				MelonBuildMenu:SetPos( 13+j, 10+i+icon_jump_up )				// Set position
+			else
+				MelonBuildMenu:SetPos( icon_jump+13+j, 10+i+icon_jump_up )				// Set position
+				icon_jump=icon_jump+1
+			end
+			MelonBuildMenu:SetSize( 65, 65 )
+			MelonBuildMenu:SetImage( mw_icons_id_units[id_cost] )	// Set the material - relative to /materials/ directory
+			MelonBuildMenu.DoClick = function()
+					LocalPlayer():ConCommand("mw_chosen_unit "..tostring(selected_unit)) 
+					LocalPlayer():ConCommand("mw_action 1")
+					
 				end
 			end
 		icon_jump=1	
 		icon_jump_up=icon_jump_up+5;
 	end
+end
+
+
+net.Receive("HUDTeam", function(len, pl)
+if (HUDTeama) then
+HUDTeama:Remove()
+end
+
+	local pl = LocalPlayer()
+	HUDTeama = vgui.Create( "DPanel" )
+	MelonColor = net.ReadColor(MelonColor)
+	HUDTeama:SetPos( 5, 5 ) -- Set the position of the panel
+	HUDTeama:SetSize( 255, ScrH()-20 ) -- Set the size of the panel
+	HUDTeama:SetBackgroundColor(0,0,0,0)
+	HUDTeama.Paint = function()
+		draw.RoundedBox(5,8,3,242,ScrH()-26, Color(0,0,0))
+		draw.RoundedBox(5,10,5,237,ScrH()-30, MelonColor)
+	end
+	Create_Units_Menu()
+
+	-- Settings menu
+local Status_Panel = vgui.Create( "DPanel", HUDTeama )
+Status_Panel:SetPos( 5, 5 )
+Status_Panel:SetSize( 255, 40)
+Status_Panel.Paint = function()
+		draw.RoundedBox(0,8,3,231,36, Color(0,0,0))
+		draw.RoundedBox(0,10,5,226,32, Color(255,255,255,255))
+		draw.RoundedBox(0,8,3,40,36, Color(0,0,0))
+		draw.RoundedBox(0,10,5,36,32, Color(255,255,255,255))
+		draw.RoundedBox(0,85,3,2,36, Color(0,0,0))
+		draw.RoundedBox(0,125,3,2,36, Color(0,0,0))
+		draw.RoundedBox(0,165,3,2,36, Color(0,0,0))
+		draw.RoundedBox(0,200,3,2,36, Color(0,0,0))
+		
+
+
+	end
+Settings_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+Settings_img:SetPos( 13, 6 )	-- Move it into frame
+Settings_img:SetSize( 30, 30 )	-- Size it to 150x150
+Settings_img:SetImage( "materials/RTS_MelonWars/icon/5.png" )
+Music_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+Music_img:SetPos( 50, 6 )	-- Move it into frame
+Music_img:SetSize( 30, 30 )	-- Size it to 150x150
+Music_img:SetImage( "materials/RTS_MelonWars/icon/6.png" )
+WebCam_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+WebCam_img:SetPos( 92, 6 )	-- Move it into frame
+WebCam_img:SetSize( 30, 30 )	-- Size it to 150x150
+WebCam_img:SetImage( "materials/RTS_MelonWars/icon/4.png" )
+Players_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+Players_img:SetPos( 132, 6 )	-- Move it into frame
+Players_img:SetSize( 30, 30 )	-- Size it to 150x150
+Players_img:SetImage( "materials/RTS_MelonWars/icon/8.png" )
+Team_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+Team_img:SetPos( 169, 6 )	-- Move it into frame
+Team_img:SetSize( 30, 30 )	-- Size it to 150x150
+Team_img:SetImage( "materials/RTS_MelonWars/icon/3.png" )
+Team_img.DoClick = function()
+				ChangeMyTeam()
+				Create_Units_Menu()
+				end
+
+Sell_img = vgui.Create( "DImageButton", Status_Panel )	-- Add image to Frame
+Sell_img:SetPos( 205, 6 )	-- Move it into frame
+Sell_img:SetSize( 30, 30 )	-- Size it to 150x150
+Sell_img:SetImage( "materials/RTS_MelonWars/icon/7.png" )
+Sell_img.DoClick = function()
+				pl:ConCommand("mw_chosen_unit -1") -- -1 es el Engine 
+				pl:ConCommand("mw_action 5")
+				end
+
+
+--WebCam
+local WebCam_Panel2 = vgui.Create( "DPanel", HUDTeama )
+WebCam_Panel2:SetPos( 13, 45 )
+WebCam_Panel2:SetSize( 232, 205)
+WebCam_Panel2:SetBackgroundColor(Color(0,0,0,255))
+
+local WebCam_Panel = vgui.Create( "DImage", HUDTeama )
+WebCam_Panel:SetPos( 15, 47 )
+WebCam_Panel:SetSize( 228, 200)
+WebCam_Panel:SetImage( "materials/RTS_MelonWars/logo.png" )
+
+
+--Buld_Type
+local Buld_Type = vgui.Create( "DPanel", HUDTeama )
+Buld_Type:SetPos( 13, 251 )
+Buld_Type:SetSize( 232, 51)
+Buld_Type:SetBackgroundColor(Color(0,0,0,255))
+local Buld_Type2 = vgui.Create( "DPanel", HUDTeama )
+Buld_Type2:SetPos( 15, 253 )
+Buld_Type2:SetSize( 228, 47)
+Buld_Type2:SetBackgroundColor(Color(255,255,255,255))
+Buld_Type2.Paint = function()
+draw.RoundedBox(0,0,0,228,47, Color(255,255,255))
+draw.RoundedBox(0,58,0,2,59, Color(0,0,0))
+draw.RoundedBox(0,120,0,2,59, Color(0,0,0))
+draw.RoundedBox(0,175,0,2,59, Color(0,0,0))
+end
+Units_img = vgui.Create( "DImageButton", HUDTeama )	-- Add image to Frame
+Units_img:SetPos( 20, 252 )	-- Move it into frame
+Units_img:SetSize( 50, 50 )	-- Size it to 150x150
+Units_img:SetImage( "materials/RTS_MelonWars/icon/9.png" )
+Units_img.DoClick = function()
+				Create_Units_Menu()
+				if (Buldings_menu) then
+				Buldings_menu:Remove()
+				end
+				if (Energy_menu) then
+				Energy_menu:Remove()
+				end
+				if (Wall_menu) then
+				Wall_menu:Remove()
+				end
+				end
+Buld_img = vgui.Create( "DImageButton", HUDTeama )	-- Add image to Frame
+Buld_img:SetPos( 80, 252 )	-- Move it into frame
+Buld_img:SetSize( 50, 50 )	-- Size it to 150x150
+Buld_img:SetImage( "materials/RTS_MelonWars/icon/11.png" )
+Buld_img.DoClick = function()
+				Create_Buldings_Menu()
+					if (Buld_menu) then
+				Buld_menu:Remove()
+				end
+				if (Wall_menu) then
+				Wall_menu:Remove()
+				end
+				if (Energy_menu) then
+				Energy_menu:Remove()
+				end
+				end
+Wall_img = vgui.Create( "DImageButton", HUDTeama )	-- Add image to Frame
+Wall_img:SetPos( 139, 252 )	-- Move it into frame
+Wall_img:SetSize( 50, 50 )	-- Size it to 150x150
+Wall_img:SetImage( "materials/RTS_MelonWars/icon/12.png" )
+Wall_img.DoClick = function()
+				Create_Wall_Menu()
+					if (Buld_menu) then
+				Buld_menu:Remove()
+				end
+				if (Buldings_menu) then
+				Buldings_menu:Remove()
+				end
+				if (Energy_menu) then
+				Energy_menu:Remove()
+				end
+				end
+Battery_img = vgui.Create( "DImageButton", HUDTeama )	-- Add image to Frame
+Battery_img:SetPos( 193, 254 )	-- Move it into frame
+Battery_img:SetSize( 45, 45 )	-- Size it to 150x150
+Battery_img:SetImage( "materials/RTS_MelonWars/icon/10.png" )
+Battery_img.DoClick = function()
+				Create_Energy_Menu()
+				if (Buld_menu) then
+				Buld_menu:Remove()
+				end
+				if (Buldings_menu) then
+				Buldings_menu:Remove()
+				end
+				if (Wall_menu) then
+				Wall_menu:Remove()
+				end
+				
+				end
+
+
+
+
 	-- Meat and water menu
 Status_Panel = vgui.Create( "DPanel", HUDTeama )
 Status_Panel:SetPos( 10, ScrH()-68 )
@@ -666,23 +944,28 @@ Meat_img:SetImage( "materials/RTS_MelonWars/icon/2.png" )
 
 end) 
 -- F1 в помощь
+
+local delay = 0.2
+local nextOccurance = 0
 function F1Calling() 
-local clickF1 = false
-if input.IsKeyDown( KEY_F1 ) then 
+local timeLeft = nextOccurance - CurTime()
+if timeLeft < 0 then
+if input.IsKeyDown( KEY_Q ) then 
+RunConsoleCommand("gmod_tool", 'melon_universal_tool')
+nextOccurance = CurTime() + delay
 if clickF1 == false then
+gui.EnableScreenClicker(true)
 clickF1 = true
-else if clickF1 == true then
-clickF1 = false
-end
-end
-if clickF1 == true then
-HUDTeama:Popup()
-else if clickf1 == false then
+else
 HUDTeama:SetPopupStayAtBack()
+clickF1 = false
+gui.EnableScreenClicker(false)
 end
 end
 end
+
 end
+
 
 
 
@@ -690,6 +973,12 @@ end
 
 
 hook.Add("Think","twsgsh",F1Calling)
+hook.Add('OnContextMenuOpen', 'NoContext4u', function()
+return false
+end)
+hook.Add('SpawnMenuOpen', 'NoContext4u', function()
+return false
+end)
 
 -- Отрубаем к херам sandboxсовскую хрень
 --hook.Add('OnContextMenuOpen', 'MelonPlayerDisableContextMenu', function() return false end)
