@@ -1,5 +1,9 @@
 
 hook.Add( "Initialize", "start", function()
+	--Заспавнился?? получи окно
+	ChangeMyTeam()
+	
+	
 	LocalPlayer().mw_selecting = 1
 	LocalPlayer().mw_selStart = Vector(0,0,0)
 	LocalPlayer().mw_selEnd = Vector(0,0,0)
@@ -20,6 +24,51 @@ hook.Add( "Initialize", "start", function()
 
 	return true 
 end)
+
+function ChangeMyTeam()
+local Team_Panel = vgui.Create( "DPanel" )
+	Team_Panel:SetPos( (ScrW()/2)-(470/2), (ScrH()/2)-(100/2) )
+	Team_Panel:SetSize(470,100)
+	Team_Panel:SetBackgroundColor(Color(0,0,0,255))
+	Team_Panel:MakePopup()
+	local label = vgui.Create("DLabel", Team_Panel)
+			label:SetPos(100, 5)
+			label:SetSize(300,40)
+			label:SetFontInternal( "DermaLarge" )
+			label:SetText("Выберите цвет команды:")
+			
+			local selection = vgui.Create("DPanel",  Team_Panel)
+			if (cvars.Number("mw_team") != 0) then
+				selection:SetPos(9+cvars.Number("mw_team")*45, 195)
+			else
+				selection:SetPos(0+35, 50)
+			end
+			selection:SetSize(50,50)
+			selection.Paint = function(s, w, h)
+				draw.RoundedBox( 10, 0, 0, w, h, Color(255,255,255,255) )
+			end
+				
+			for i=1, 8 do
+				local button = vgui.Create("DButton",  Team_Panel)
+				button:SetSize(40,40)
+				button:SetPos(10+i*45,50)
+				button:SetText("")
+				function button:DoClick()
+					LocalPlayer():ConCommand("mw_team "..tostring(i))
+					selection:SetPos(15+i*45, 50)
+					
+					net.Start("MW_UpdateClientInfo")
+						net.WriteInt(i, 8)
+					net.SendToServer()
+					Team_Panel:Remove()
+				end
+				button.Paint = function(s, w, h)
+					draw.RoundedBox( 6, 0, 0, w, h, Color(100,100,100,255) )
+					draw.RoundedBox( 4, 2, 2, w-4, h-4, mw_team_colors[i] )
+				end
+			end
+
+end
 
 
 mw_team_colors  = {Color(255,50,50,255),Color(50,50,255,255),Color(255,200,50,255),Color(30,200,30,255),Color(255,50,255,255),Color(100,255,255,255),Color(255,120,0,255),Color(255,100,150,255)}
@@ -617,22 +666,30 @@ Meat_img:SetImage( "materials/RTS_MelonWars/icon/2.png" )
 
 end) 
 -- F1 в помощь
-function myfunc() if input.IsKeyDown( KEY_F1 ) then 
-	local pl = LocalPlayer()
-	local Hide_Hud = true;
-	  if HUDTeama then
-		if (HUDTeama:Hide(false)) then
-		HUDTeama:Hide(true)
-		print ("скрыл")
-		else
-		HUDTeama:Hide(false)
+function F1Calling() 
+local clickF1 = false
+if input.IsKeyDown( KEY_F1 ) then 
+if clickF1 == false then
+clickF1 = true
+else if clickF1 == true then
+clickF1 = false
+end
+end
+if clickF1 == true then
+HUDTeama:Popup()
+else if clickf1 == false then
+HUDTeama:SetPopupStayAtBack()
 end
 end
 end
 end
 
 
-hook.Add("Think","twsgsh",myfunc)
+
+
+
+
+hook.Add("Think","twsgsh",F1Calling)
 
 -- Отрубаем к херам sandboxсовскую хрень
 --hook.Add('OnContextMenuOpen', 'MelonPlayerDisableContextMenu', function() return false end)
