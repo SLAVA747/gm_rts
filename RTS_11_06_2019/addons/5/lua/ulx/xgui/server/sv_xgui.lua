@@ -1,0 +1,1 @@
+ULib.ucl.registerAccess("xgui_urm", "superadmin", "Access to modify URM.", "XGUI" )
